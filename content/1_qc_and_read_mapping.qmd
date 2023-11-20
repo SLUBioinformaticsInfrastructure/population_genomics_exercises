@@ -1,0 +1,168 @@
+## Read Mapping and Variant Calling
+*Author: Lizel Potgieter, adapted by Amrei Binzer-Panchal*
+
+In this part of the exercise, we will have a look at the data, do basic quality control and mapping of the reads. 
+
+**If you don't know how to use a tool, check out the help function. This is easily done by using the -h or --help flags after the tool name e.g. "fastqc -h"**
+
+For this course we will assume that you have access to a HPC server. If you don't have access to a server or a powerful personal computer, you can use for example Galaxy during the workshop.
+
+
+## Introduction
+Read mapping and variant calling is the most important aspect of population genomics analyses. Appropriate quality control and the selection of applicable pipelines is therefore crucial to obtain trustworthy data for reliable and reproducible analyses. In this session, we will use simulated data to test the reliability of the methods.
+
+In preparation for this course, I have created a forward simulation of a population of 20 individuals from the first chromosome from *Lentinula edodes* ([publication here](https://pubmed.ncbi.nlm.nih.gov/35572413/)). This assembly was produced from third generation sequencing. Using simulated data allows us to test the precision and recall of our methods. 
+
+After each section, there are some basic questions I'd like you to think about and answer. These will not be graded, and are merely points to ensure that you have understood everything we are covering in each section.
+
+## Description of what is in the folder 1_read_mapping
+1. The reference sequence: lentinula_scaffold_1.fa
+2. Forward and reverse reads for 20 simulated individuals SE001 to SE020 in a separate folder (fastq)
+
+## Read Quality Assessment
+Tools: FastQC, MultiQC
+
+**FastQC and MultiQC**
+
+We want to perform Quality Control (QC) on our raw sequence data. We will use FastQC to generate quality reports from our fastq files, and we will use MultiQC to aggregate our reports. Our data was simulated to mimic the error profile of an Illumina HiSeq 2500. The quality of short reads has improved drastically over the years, so the reports we'll get are realistic representations of recently sequenced genomes. For some older sequencing runs, the quality may not be as good, and you may have to employ additional software to control for worse quality and the presence of adapters.
+To trim poor quality sequences, consider Trimmomatic (http://www.usadellab.org/cms/?page=trimmomatic) or scripts within the BBMap package (https://github.com/BioInfoTools/BBMap). We won't be touching on trimming and repairing mismatched reads in this tutorial.
+
+For a few samples, generate the FastQC report. 
+```{.bash}
+fastqc $infile -o $infile_fastqc 
+```
+
+MultiQC is like FastQC, but for several samples at once.
+```{.bash}
+multiqc $infile1 $infile2
+```
+***Questions***
+
+1. What kind of reads do we have?
+
+2. Why does the quality of the reads decrease slightly at the end of the read?
+
+3. Is this kind of data expected from a real experiment?
+
+4. What do you expect to see if there is primer contamination?
+
+5. What is a deviation from the expected GC possibly indicative of?
+
+6. How does GC content affect genome assembly and read mapping?
+
+## Read Mapping
+Tools: BWA, Samtools, GATK
+
+To perform variant calling, the reads must be mapped to a reference genome. To accomplish this, we employ the Burrows-Wheeler Alignment (BWA) tool.
+
+"BWA is a software package for mapping low-divergent sequences against a large reference genome, such as the human genome. It consists of three algorithms: BWA-backtrack, BWA-SW and BWA-MEM. The first algorithm is designed for Illumina sequence reads up to 100bp, while the rest two for longer sequences ranged from 70bp to 1Mbp. BWA-MEM and BWA-SW share similar features such as long-read support and split alignment, but BWA-MEM, which is the latest, is generally recommended for high-quality queries as it is faster and more accurate. BWA-MEM also has better performance than BWA-backtrack for 70-100bp Illumina reads.
+
+For all the algorithms, BWA first needs to construct the FM-index for the reference genome (the index command). Alignment algorithms are invoked with different sub-commands: aln/samse/sampe for BWA-backtrack, bwasw for BWA-SW and mem for the BWA-MEM algorithm."
+https://bio-bwa.sourceforge.net/bwa.shtml
+
+We will be using the BWA-MEM2 function in Galaxy. You will need to use the lentinula_scaffold_1.fa reference sequence, create an index, and select the paired reads function to map the reads to reference sequence.
+
+First, the reference genome must be indexed.
+```{.bash}
+samtools faidx
+```
+
+Next, the forward and reverse reads are mapped to the reference genome. Here, try to use a *for* loop to automate the process. Let me know if you get stuck!
+```{.bash}
+bwa mem $reference_genome $read1 $read2 > $outfile.sam
+```
+
+Have a look at the contents of one of the .sam files. Can you see the various characteristics of the file I spoke about during my introductory lecture?
+To save some space, convert the .sam to a .bam file with Samtools
+```{.bash}
+samtools view 
+```
+Remove all the .sam files in your directory
+
+```{.bash}
+rm
+```
+
+Sort the contents of the .bam files
+```{.bash}
+samtools sort
+```
+
+Remove duplicates from the sorted .bam files
+```{.bash}
+samtools rmdup
+```
+
+Index the sorted .bam files that have had duplicates removed
+```{.bash}
+samtools index
+```
+
+Now that the pre-processing has been done, we will move over to GATK to call variants. Here it is important to set ploidy to the organism you're working on. We're working on a haploid genome in this workshop
+```{.bash}
+gatk HaplotypeCaller 
+```
+
+Here you will have an individual GVCF file for each individual. These need to be combined to a single GVCF 
+```{.bash}
+gatk CombineGVCFs
+```
+
+The combined GVCF, must be genotyped
+```{.bash}
+gatk GenotypeGVCFs
+```
+
+Now you have a raw VCF that can be filtered in subsequent steps. In this practical, we will practice plotting some of this really tidy data, and compare it to a real world VCF to see the extent of noise in the dataset.
+
+*Questions*
+
+1. At which position is the first variant detected?
+
+2. What does the QUAL field indicate? Why are some quality scores so much lower than others?
+
+3. What kind of filtering criteria would you consider with this data?
+
+4. If you had a diploid species, how would the VCF differ from the one you have produced today?
+
+5. How would you benchmark your pipeline?
+
+If you are feeling particularly adventurous and want to make full use of the fact that this was a simulated dataset, please see the first optional exercise. If you have had more than enough of read mapping, don't worry about this exercise!
+
+
+
+## Genome Assembly and Quality Assessment
+Tools: SPAdes, QUAST
+
+It's all well and good if you have a reference genome to work with, but if you don't you need to assemble your own reference genome. At the moment, this is mostly done with third generation sequencing as the reads are longer, and telomere-to-telomere assemblies are fairly easily attainable. However, in a lot of studies, there is only Illumina data available. In this part of the workshop, you will create a *de novo* assembly for one of the isolates and assess the quality
+
+**SPAdes**
+
+The current version of SPAdes works with reads produced by Illumina or IonTorrent and is capable of providing hybrid assemblies using PacBio, Oxford Nanopore and Sanger reads. You can also provide additional contigs that will be used as long reads. SPAdes (v3.15.0) supports paired-end reads, mate-pairs and unpaired reads. SPAdes can take as input several paired-end and mate-pair libraries simultaneously. Note, that SPAdes was initially designed for small genomes. It was tested on bacterial (both single-cell Multiple displacement amplification (MDA) and standard isolates), fungal and other small genomes. SPAdes is not intended for larger genomes (e.g. mammalian size genomes). For such purposes you can use it at your own risk
+Reference: https://cab.spbu.ru/software/spades/
+
+```{.bash}
+python spades.py -1 $infile_read1 $infile_read2 -o $infile_assembly
+```
+
+Try change the k-mer sizes, and see how that affects your assembly. To get quality statistics of your assembly, use QUAST on your final assembly
+```{.bash}
+quast
+```
+
+To just quickly see how many scaffolds are present in your assembly, use this neat little bash trick
+```{.bash}
+grep ">" $infile | wc -l
+```
+
+*Questions*
+
+1. How many contigs have been built? 
+
+2. What is the mean, min and max length of the contigs?
+
+3. What is the N50 of the contigs? How do you interpret N50 and L50?
+
+4. What is the effect on the assembly when you vary the k-mer parameter?
+
+5. What is the advantage of reference guided assembly over *de novo* assembly?

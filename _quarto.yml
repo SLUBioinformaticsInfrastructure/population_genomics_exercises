@@ -1,0 +1,22 @@
+project:
+  type: website
+
+website:
+  title: "NGS_funghi"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - about.qmd
+
+format:
+  html:
+    theme: united
+    self-contained: true
+    page-layout: full
+    css: styles.css
+    toc: true
+    number-sections: true
+
+
+

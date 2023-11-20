@@ -1,0 +1,299 @@
+## Introduction to Linux and Servers
+*Author: Lizel Potgieter, adapted by Amrei Binzer-Panchal*
+
+Linux is a family of open-source Unix-like operating systems based on the Linux kernel, an operating system kernel first released on September 17, 1991, by Linus Torvalds (https://en.wikipedia.org/wiki/Linux). Most servers run on a Linux-based operating system. 
+
+If you have no, or not much, experience with working with the command line please take some time to follwo the software carpentry course on the [Unix shell](https://swcarpentry.github.io/shell-novice/).
+
+If you have some experience with the command line you can have a look at the commands below (@sec-basic_commands and onwards) to refresh you knowledge. 
+
+Either way, to make sure that you are on an adequate level of proficiency jump to the last part of this page and take the Linux Exercise Quiz (@sec-linux_quiz) there. 
+
+And last but not least, here are some other resources with many other cool tips and tricks for all of your bioinformatics needs. For the full cheat sheets and other commands, please see:
+
+- [Cheatography](https://cheatography.com/davechild/cheat-sheets/linux-command-line/)
+- [Stephen Turner's GitHub](https://github.com/stephenturner/oneliners)
+- [Ming Tang's GitHub](https://github.com/crazyhottommy/bioinformatics-one-liners)
+
+## Basic Structure of Commands {#sec-basic_commands}
+cmd refers to a command.
+Input of cmd from file
+```{.bash}
+cmd < file
+```
+Output of cmd2 as file input to cmd1
+```{.bash}
+cmd1 <(cmd2)
+```
+Standard output (stdout) of cmd to file
+```{.bash}
+cmd > file
+```
+Append stdout to file
+```{.bash}
+cmd >> file
+```
+stdout of cmd1 to cmd2
+```{.bash}
+cmd1 | cmd2
+```
+Run cmd1 then cmd2
+```{.bash}
+cmd1 ; cmd2
+```
+Run cmd2 if cmd1 is successful
+```{.bash}
+cmd1 && cmd2
+```
+Run cmd2 if cmd1 is not successful
+```{.bash}
+cmd1 || cmd2
+```
+
+## Short commands
+Stop current command
+```{.bash}
+CTRL-c
+```
+Go to start of line
+```{.bash}
+CTRL-a
+```
+Go to end of line
+```{.bash}
+CTRL-e
+```
+Cut from start of line
+```{.bash}
+CTRL-u
+```
+Cut to end of line
+```{.bash}
+CTRL-k
+```
+Search history
+```{.bash}
+CTRL-r 
+```
+Run previous command, replacing abc with 123
+```{.bash}
+^abc^123
+```
+
+## Grep commands
+Case insens­itive search
+```{.bash}
+grep -i
+```
+Recursive search
+```{.bash}
+grep -r
+```
+Inverted search
+```{.bash}
+grep -v
+```
+Show matched part of file only
+```{.bash}
+grep -o
+```
+
+## File-based commands
+Create file1
+```{.bash}
+touch file1
+```
+Concat­enate files and output
+```{.bash}
+cat file1 file2
+```
+View and paginate file1
+```{.bash}
+less file1
+```
+Get type of file1
+```{.bash}
+file file1
+```
+Copy file1 to file2
+```{.bash}
+cp file1 file2
+```
+Move file1 to file2
+```{.bash}
+mv file1 file2
+```
+Delete file1
+```{.bash}
+rm file1
+```
+Show first 10 lines of file1
+```{.bash}
+head file1
+```
+Show first 50 lines of file1
+```{.bash}
+head -n 50 file1
+```
+Show last 10 lines of file1
+```{.bash}
+tail file1
+```
+Output last lines of file1 as it changes
+```{.bash}
+tail -F file1
+```
+
+## Replacing patterns with other patterns with sed
+Replacing a pattern and writing to a new file (use this until you are certain you know what you are doing)
+```{.bash}
+sed "s/foo/bar/g" $infile > $outfile
+```
+Replacing a pattern in the same file (there is no going back)
+```{.bash}
+sed -i "s/foo/bar/g" $infile
+```
+Replacing a pattern in a line that contains a string (here just foo)
+```{.bash}
+sed -i "/foo/s/bar/foobar/g" $infile
+```
+
+## Some Useful Commands for Bioinformatics
+Count the entries in a fasta file. You can substitute the header (>) for any pattern to count the number of occurrences in your file
+```{.bash}
+grep ">" $infile | wc -l
+```
+
+## File manipulation with awk
+Print columns 2, 4, and 5 to new file
+```{.bash}
+awk '{print $2,$4,$5}' input.txt > outfile
+```
+Print columns where value in column 3 is larger than in column 5
+```{.bash}
+awk '$3>$5' file.txt
+```
+Print sum of column 1
+```{.bash}
+awk '{sum+=$1} END {print sum}' file.txt
+```
+Compute the mean of column 2
+```{.bash}
+awk '{x+=$2}END{print x/NR}' file.txt
+```
+Remove duplicates while keeping the order of the file
+```{.bash}
+awk '!visited[$0]++' file.txt
+```
+Split multi-fasta into individual fasta files
+```{.bash}
+awk '/^>/{s=++d".fa"} {print > s}' multi.fa
+```
+Length of each sequence in a multi-fasta file
+```{.bash}
+awk '/^>/ {if (seqlen){print seqlen}; print ;seqlen=0;next; } { seqlen = seqlen +length($0)}END{print seqlen}' file.fa
+```
+Sort VCF with header
+```{.bash}
+cat my.vcf | awk '$0~"^#" { print $0; next } { print $0 | "sort -k1,1V -k2,2n" }'
+```
+
+## A basic *for* loop
+Often we wish to run the same code for all files that are in a folder, have the same extension (like .fq), or have a similar string in the filename. Instead of changing the name in the code and rerunning it manually, we use *for* loops. You can write this directly into the terminal, or save it into a bash file (extension .sh)
+This line of code uses i as the variable for all files that have a .fq extension in the folder, and runs fastqc for each of them. The -o ${i}_fastqc indicates that the original file name will be kept, and appended with _fastqc.
+```{.bash}
+for i in *.fq ; do fastqc ${i} -o ${i}_fastqc ; done
+```
+
+## Linux Exercise Quiz {#sec-linux_quiz}
+Please try to complete each task without looking at the answer first.
+
+1. Make a folder in the proj folder with your name
+
+<details>
+<summary>solution: </summary>
+```{.bash}
+mkdir your_name
+```
+</details>
+
+2. Navigate to your folder
+
+<details>
+<summary>solution: </summary>
+```{.bash}
+ cd yourname
+```
+</details>
+
+3. Create an empty file
+
+<details>
+<summary>solution: </summary>
+```{.bash}
+ touch randomfile
+```
+</details>
+
+4. Rename randomfile
+
+<details>
+<summary>solution: </summary>
+```{.bash}
+ mv randomfile randomfile2
+```
+</details>
+
+5. Delete random file
+
+<details>
+<summary>solution: </summary>
+```{.bash}
+ rm randomfile2
+```
+</details>
+
+6. Create a directory
+
+<details>
+<summary>solution: </summary>
+```{.bash}
+ mkdir randomdir
+```
+</details>
+
+7. Delete the directory
+
+<details>
+<summary>solution: </summary>
+```{.bash}
+ rm -r randomdir
+```
+</details>
+
+8. Create a symbolic link (symlink) from the source data to your own folder. Please do not copy it to your own directories! There will be a new folder for each subsection of the workshop. This example is only for the fastq files we will use for read mapping 
+
+<details>
+<summary>solution: </summary>
+```{.bash}
+ ln -s /1_fastqc/*fq
+```
+</details>
+
+9. Listing the contents of your directory. The symlinks should have a different colour from than white
+
+<details>
+<summary>solution: </summary>
+```{.bash}
+ ls
+```
+</details>
+
+10. Load the bwa module on the server
+
+<details>
+<summary>solution: </summary>
+```{.bash}
+ module load bwa/0.7.4
+```
+</details>
