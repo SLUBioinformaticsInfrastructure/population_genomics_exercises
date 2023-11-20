@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://SLUBioinformaticsInfrastructure.github.io/population_genomics_exercises/content/0_introduction_to_linux.html</loc>
+    <lastmod>2023-11-20T21:17:39.420Z</lastmod>
+  </url>
+  <url>
+    <loc>https://SLUBioinformaticsInfrastructure.github.io/population_genomics_exercises/content/1_qc_and_read_mapping.html</loc>
+    <lastmod>2023-11-20T21:17:41.134Z</lastmod>
+  </url>
+  <url>
+    <loc>https://SLUBioinformaticsInfrastructure.github.io/population_genomics_exercises/content/2_vcf_manipulation.html</loc>
+    <lastmod>2023-11-20T21:17:47.050Z</lastmod>
+  </url>
+  <url>
+    <loc>https://SLUBioinformaticsInfrastructure.github.io/population_genomics_exercises/index.html</loc>
+    <lastmod>2023-11-20T21:17:48.672Z</lastmod>
+  </url>
+  <url>
+    <loc>https://SLUBioinformaticsInfrastructure.github.io/population_genomics_exercises/about.html</loc>
+    <lastmod>2023-11-20T21:17:50.848Z</lastmod>
+  </url>
+</urlset>

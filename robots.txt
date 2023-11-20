@@ -1,0 +1,1 @@
+Sitemap: https://SLUBioinformaticsInfrastructure.github.io/population_genomics_exercises/sitemap.xml
