@@ -4042,7 +4042,10 @@ vertical-align: -.125em;
   <ul>
   <li><a href="#read-mapping-and-variant-calling" id="toc-read-mapping-and-variant-calling" class="nav-link active" data-scroll-target="#read-mapping-and-variant-calling"><span class="toc-section-number">1</span>  Read Mapping and Variant Calling</a></li>
   <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction"><span class="toc-section-number">2</span>  Introduction</a></li>
-  <li><a href="#description-of-what-is-in-the-folder-1_read_mapping" id="toc-description-of-what-is-in-the-folder-1_read_mapping" class="nav-link" data-scroll-target="#description-of-what-is-in-the-folder-1_read_mapping"><span class="toc-section-number">3</span>  Description of what is in the folder 1_read_mapping</a></li>
+  <li><a href="#the-data" id="toc-the-data" class="nav-link" data-scroll-target="#the-data"><span class="toc-section-number">3</span>  The data</a>
+  <ul class="collapse">
+  <li><a href="#description-of-the-data" id="toc-description-of-the-data" class="nav-link" data-scroll-target="#description-of-the-data"><span class="toc-section-number">3.1</span>  Description of the data</a></li>
+  </ul></li>
   <li><a href="#read-quality-assessment" id="toc-read-quality-assessment" class="nav-link" data-scroll-target="#read-quality-assessment"><span class="toc-section-number">4</span>  Read Quality Assessment</a></li>
   <li><a href="#read-mapping" id="toc-read-mapping" class="nav-link" data-scroll-target="#read-mapping"><span class="toc-section-number">5</span>  Read Mapping</a></li>
   <li><a href="#genome-assembly-and-quality-assessment" id="toc-genome-assembly-and-quality-assessment" class="nav-link" data-scroll-target="#genome-assembly-and-quality-assessment"><span class="toc-section-number">6</span>  Genome Assembly and Quality Assessment</a></li>
@@ -4067,23 +4070,70 @@ vertical-align: -.125em;
 <p>In preparation for this course, I have created a forward simulation of a population of 20 individuals from the first chromosome from <em>Lentinula edodes</em> (<a href="https://pubmed.ncbi.nlm.nih.gov/35572413/">publication here</a>). This assembly was produced from third generation sequencing. Using simulated data allows us to test the precision and recall of our methods.</p>
 <p>After each section, there are some basic questions I’d like you to think about and answer. These will not be graded, and are merely points to ensure that you have understood everything we are covering in each section.</p>
 </section>
-<section id="description-of-what-is-in-the-folder-1_read_mapping" class="level2" data-number="3">
-<h2 data-number="3" class="anchored" data-anchor-id="description-of-what-is-in-the-folder-1_read_mapping"><span class="header-section-number">3</span> Description of what is in the folder 1_read_mapping</h2>
+<section id="the-data" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="the-data"><span class="header-section-number">3</span> The data</h2>
+<p>You can download the data <a href="https://figshare.com/articles/dataset/Read_Mapping_Forward_Simulation_for_Variant_Calling/22309726">here</a>.</p>
+<section id="description-of-the-data" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="description-of-the-data"><span class="header-section-number">3.1</span> Description of the data</h3>
 <ol type="1">
 <li>The reference sequence: lentinula_scaffold_1.fa</li>
 <li>Forward and reverse reads for 20 simulated individuals SE001 to SE020 in a separate folder (fastq)</li>
 </ol>
+</section>
 </section>
 <section id="read-quality-assessment" class="level2" data-number="4">
 <h2 data-number="4" class="anchored" data-anchor-id="read-quality-assessment"><span class="header-section-number">4</span> Read Quality Assessment</h2>
 <p>Tools: FastQC, MultiQC</p>
 <p><strong>FastQC and MultiQC</strong></p>
 <p>We want to perform Quality Control (QC) on our raw sequence data. We will use FastQC to generate quality reports from our fastq files, and we will use MultiQC to aggregate our reports. Our data was simulated to mimic the error profile of an Illumina HiSeq 2500. The quality of short reads has improved drastically over the years, so the reports we’ll get are realistic representations of recently sequenced genomes. For some older sequencing runs, the quality may not be as good, and you may have to employ additional software to control for worse quality and the presence of adapters. To trim poor quality sequences, consider Trimmomatic (http://www.usadellab.org/cms/?page=trimmomatic) or scripts within the BBMap package (https://github.com/BioInfoTools/BBMap). We won’t be touching on trimming and repairing mismatched reads in this tutorial.</p>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Hands-on
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p>For a few samples, generate the FastQC report.</p>
+<details>
+<summary>
+solution:
+</summary>
 <div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">fastqc</span> <span class="va">$infile</span> <span class="at">-o</span> <span class="va">$infile_fastqc</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>MultiQC is like FastQC, but for several samples at once.</p>
+</details>
+</div>
+</div>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Hands-on
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>MultiQC is like FastQC, but for several samples at once. It can also detect and summarize output reports from a variety of tools to give you an overview of the performance of tools you used on your data.</p>
+<details>
+<summary>
+solution:
+</summary>
 <div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">multiqc</span> <span class="va">$infile1</span> <span class="va">$infile2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><strong><em>Questions</em></strong></p>
+</details>
+</div>
+</div>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Questions
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <ol type="1">
 <li><p>What kind of reads do we have?</p></li>
 <li><p>Why does the quality of the reads decrease slightly at the end of the read?</p></li>
@@ -4092,6 +4142,8 @@ vertical-align: -.125em;
 <li><p>What is a deviation from the expected GC possibly indicative of?</p></li>
 <li><p>How does GC content affect genome assembly and read mapping?</p></li>
 </ol>
+</div>
+</div>
 </section>
 <section id="read-mapping" class="level2" data-number="5">
 <h2 data-number="5" class="anchored" data-anchor-id="read-mapping"><span class="header-section-number">5</span> Read Mapping</h2>
@@ -4142,7 +4194,16 @@ vertical-align: -.125em;
 <div class="sourceCode" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quast</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>To just quickly see how many scaffolds are present in your assembly, use this neat little bash trick</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="st">&quot;&gt;&quot;</span> <span class="va">$infile</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><em>Questions</em></p>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Questions
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <ol type="1">
 <li><p>How many contigs have been built?</p></li>
 <li><p>What is the mean, min and max length of the contigs?</p></li>
@@ -4150,6 +4211,8 @@ vertical-align: -.125em;
 <li><p>What is the effect on the assembly when you vary the k-mer parameter?</p></li>
 <li><p>What is the advantage of reference guided assembly over <em>de novo</em> assembly?</p></li>
 </ol>
+</div>
+</div>
 
 
 </section>
