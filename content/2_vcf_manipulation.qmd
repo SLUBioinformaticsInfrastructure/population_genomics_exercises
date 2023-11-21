@@ -5,100 +5,178 @@
 A variant call format (VCF) is a type of file that stores all the information regarding variant and non-variant sites of individuals mapped to a reference assembly. This assembly can be a single chromosome, or a collection of scaffolds- there really is no limit!
 
 ## Data we will be using
-To get familiar with the kind of tools and data one typically uses in bioinformatics analyses, I have selected a case from literature.
-1. Paper: https://onlinelibrary.wiley.com/doi/full/10.1111/mec.16369
-2. Data availability: https://datadryad.org/stash/dataset/doi:10.5061/dryad.7d7wm37wr
-3. Reference genome: https://mycocosm.jgi.doe.gov/Pheni1/Pheni1.home.html
+To get familiar with the kind of tools and data one typically uses in bioinformatics analyses, we have selected a case from literature.
 
-To get around storage and computational time restrictions, you will divide into groups of two and I will assign a scaffold to your group. You'll try to redo some of the analyses and statistics that are presented in the supplementary material, discover if there are any regions under selection in your scaffold
+1. [Publication](https://onlinelibrary.wiley.com/doi/full/10.1111/mec.16369)
 
-## Tools available
-There are a multitude of tools available for the analysis of VCFs. It is almost entirely up to the researcher as to how they wish to interact with these files. Some bioinformaticians prefer to analyse files in the CLI and only plot the final data in R or python, while others prefer to do everything with R packages. For this part of the workshop, I will show you bits of both aspects.
+2. [Data set](https://datadryad.org/stash/dataset/doi:10.5061/dryad.7d7wm37wr)
 
-One popular R package for VCF analyses is vcfR (https://cran.r-project.org/web/packages/vcfR/vignettes/intro_to_vcfR.html#:~:text=vcfR%20is%20a%20package%20intended,at%20the%20vcfR%20documentation%20website)
+3. [Reference genome](https://mycocosm.jgi.doe.gov/Pheni1/Pheni1.home.html)
 
-To plot data, we will be using ggplot2, and some functions of the dplyr package. 
+To get around storage and computational time restrictions, you can do the following anslyses on one scaffold. Redo some of the analyses and statistics that are presented in the supplementary material. Are there any regions under selection in your scaffold?
 
-## R scripts
+## Dowload the data
+
+Download the data from the above links. Make sure you download the data set, as well as the corresponding R scripts. 
+
+::: {.callout-tip}
+## Hands-on
+Look at the data set to see what files there are, what they contain and how they are structured (hint: start at the README file). 
+:::
+
+
+## Tools for VCF analyses
+
+There are a multitude of tools available for the analysis of VCFs. It is almost entirely up to the researcher how they wish to interact with these files. Some bioinformaticians prefer to analyse files in the CLI and only plot the final data in R or python, while others prefer to do everything with R packages. For this part of the workshop, you will work with bits of both aspects.
+
+## R
+
+One popular R package for VCF analyses is [vcfR](https://cran.r-project.org/web/packages/vcfR/vignettes/intro_to_vcfR.html#:~:text=vcfR%20is%20a%20package%20intended,at%20the%20vcfR%20documentation%20website).
+
+To plot data, we will use [ggplot2](https://ggplot2.tidyverse.org/), and some functions of the [dplyr](https://dplyr.tidyverse.org/) package. 
+
+::: {.callout-tip}
+## Hands-on
+Load the packages in R (for example in R-studio). 
+
+<details>
+<summary>solution: </summary>
+```{R}
+library("vcfR")
+library("ggplot2")
+library("dplyr")
+```
+</details>
+:::
+
+
+### Metadata
 To ensure that your plots are easy to understand, it is important to have some metadata stored in the data you wish to plot. This can be sampling location, identity to ancestral genetic population, sampling year, and so on.
 
-The data we will be using has really neat identifiers as the individual names start with the population. This should act as an example for you to assign good names to your own data to ensure that as much as possible can be automated to reduce the chance of human error (as careful as you are, mistakes can happen very easily with large amounts of data and automation ensures that mistakes can easily be caught and corrected!)
+The data we will be using has really neat identifiers as the individual names start with the population. Good sample names facilitate analyses, automation and therefore reduce the chance of human error (as careful as you are, mistakes can happen very easily with large amounts of data and automation ensures that mistakes can easily be caught and corrected!)
 Have a look in the online data to see if you can see where this comes from.
-```{.r}
- input_data %>%
+
+::: {.callout-tip}
+## Hands-on
+Read in the data. Which file contains the information we need?
+
+<details>
+<summary>solution: </summary>
+```{R}
+setwd("/Users/amrei/Desktop/NGS_data_Lizel/doi_10.5061_dryad.7d7wm37wr__v4/")
+input_data <- read.csv("Environmental_variation.csv") 
+str(input_data)
+```
+</details>
+:::
+
+Using <dplyr> we can use the information in the individual IDs to make two new columns, *Population* and *Location*:
+
+```{r}
+input_data <- input_data %>%
   mutate(Population = case_when(
-    startsWith(ID, "Bil") ~ "bil",
-    startsWith(ID, "Bnp") ~ "bnp",
-    startsWith(ID, "Her") ~ "her",
-    startsWith(ID, "Iss") ~ "iss",
-    startsWith(ID, "Kai") ~ "kai",
-    startsWith(ID, "Koi") ~ "koi",
-    startsWith(ID, "Kot") ~ "kot",
-    startsWith(ID, "Luu") ~ "luu",
-    startsWith(ID, "Met") ~ "met",
-    startsWith(ID, "Mor") ~ "mor",
-    startsWith(ID, "Mus") ~ "mus",
-    startsWith(ID, "Myl") ~ "myl",
-    startsWith(ID, "Pam") ~ "pam",
-    startsWith(ID, "Pat") ~ "pat",
-    startsWith(ID, "Pet") ~ "pet",
-    startsWith(ID, "Puk") ~ "puk",
-    startsWith(ID, "Rus") ~ "rus",
-    startsWith(ID, "Sig") ~ "sig",
-    startsWith(ID, "Skj") ~ "skj",
-    startsWith(ID, "eSK") ~ "skj",
-    startsWith(ID, "Spk") ~ "spk",
-    startsWith(ID, "Sus") ~ "sus",
-    startsWith(ID, "Ulv") ~ "ulv",
-    startsWith(ID, "Van") ~ "van",
-    startsWith(ID, "Ves") ~ "ves"
+    startsWith(ind, "Bil") ~ "bil",
+    startsWith(ind, "BNP") ~ "bnp",
+    startsWith(ind, "Her") ~ "her",
+    startsWith(ind, "Iss") ~ "iss",
+    startsWith(ind, "Kai") ~ "kai",
+    startsWith(ind, "Koi") ~ "koi",
+    startsWith(ind, "Kot") ~ "kot",
+    startsWith(ind, "Luu") ~ "luu",
+    startsWith(ind, "Met") ~ "met",
+    startsWith(ind, "Mor") ~ "mor",
+    startsWith(ind, "Mus") ~ "mus",
+    startsWith(ind, "Myl") ~ "myl",
+    startsWith(ind, "Pam") ~ "pam",
+    startsWith(ind, "Pat") ~ "pat",
+    startsWith(ind, "Pet") ~ "pet",
+    startsWith(ind, "Puk") ~ "puk",
+    startsWith(ind, "Rus") ~ "rus",
+    startsWith(ind, "Sig") ~ "sig",
+    startsWith(ind, "Skj") ~ "skj",
+    startsWith(ind, "eSK") ~ "skj",
+    startsWith(ind, "Spk") ~ "spk",
+    startsWith(ind, "Sus") ~ "sus",
+    startsWith(ind, "Ulv") ~ "ulv",
+    startsWith(ind, "Van") ~ "van",
+    startsWith(ind, "Ves") ~ "ves"
   ))
 
- input_data %>%
+ input_data <- input_data %>%
   mutate(Location = case_when(
-    startsWith(ID, "Bil") ~ "Sweden",
-    startsWith(ID, "Bnp") ~ "Poland",
-    startsWith(ID, "Her") ~ "SWF",
-    startsWith(ID, "Iss") ~ "NEF",
-    startsWith(ID, "Kai") ~ "NEF",
-    startsWith(ID, "Koi") ~ "NEF",
-    startsWith(ID, "Kot") ~ "SWF",
-    startsWith(ID, "Luu") ~ "SWF",
-    startsWith(ID, "Met") ~ "SWF",
-    startsWith(ID, "Mor") ~ "Norway",
-    startsWith(ID, "Mus") ~ "SWF",
-    startsWith(ID, "Myl") ~ "SWF",
-    startsWith(ID, "Pam") ~ "NEF",
-    startsWith(ID, "Pat") ~ "NEF",
-    startsWith(ID, "Pet") ~ "SWF",
-    startsWith(ID, "Puk") ~ "SWF",
-    startsWith(ID, "Rus") ~ "Russia",
-    startsWith(ID, "Sig") ~ "Norway",
-    startsWith(ID, "Skj") ~ "Norway",
-    startsWith(ID, "eSK") ~ "Norway",
-    startsWith(ID, "Spk") ~ "Norway",
-    startsWith(ID, "Sus") ~ "SWF",
-    startsWith(ID, "Ulv") ~ "NEF",
-    startsWith(ID, "Van") ~ "NEF",
-    startsWith(ID, "Ves") ~ "SWF"
+    startsWith(ind, "Bil") ~ "Sweden",
+    startsWith(ind, "BNP") ~ "Poland",
+    startsWith(ind, "Her") ~ "SWF",
+    startsWith(ind, "Iss") ~ "NEF",
+    startsWith(ind, "Kai") ~ "NEF",
+    startsWith(ind, "Koi") ~ "NEF",
+    startsWith(ind, "Kot") ~ "SWF",
+    startsWith(ind, "Luu") ~ "SWF",
+    startsWith(ind, "Met") ~ "SWF",
+    startsWith(ind, "Mor") ~ "Norway",
+    startsWith(ind, "Mus") ~ "SWF",
+    startsWith(ind, "Myl") ~ "SWF",
+    startsWith(ind, "Pam") ~ "NEF",
+    startsWith(ind, "Pat") ~ "NEF",
+    startsWith(ind, "Pet") ~ "SWF",
+    startsWith(ind, "Puk") ~ "SWF",
+    startsWith(ind, "Rus") ~ "Russia",
+    startsWith(ind, "Sig") ~ "Norway",
+    startsWith(ind, "Skj") ~ "Norway",
+    startsWith(ind, "eSK") ~ "Norway",
+    startsWith(ind, "Spk") ~ "Norway",
+    startsWith(ind, "Sus") ~ "SWF",
+    startsWith(ind, "Ulv") ~ "NEF",
+    startsWith(ind, "Van") ~ "NEF",
+    startsWith(ind, "Ves") ~ "SWF"
 ))
 ```
-In the supplementary data, the authors forgot to add the location of the kai population, so I just assigned it to NEF. Let us see if that was the correct designation. 
+
+::: {.callout-tip}
+## Hands-on
+Where did we find the location information for the samples?
+
+<details>
+<summary>solution: </summary>
+In the supplementary information available for download together with the [publication](https://onlinelibrary.wiley.com/doi/full/10.1111/mec.16369). 
+
+Scroll down to supporting information. Name of the file: [mec16369-sup-0001-supinfo.docx](https://onlinelibrary.wiley.com/action/downloadSupplement?doi=10.1111%2Fmec.16369&file=mec16369-sup-0001-Supinfo.docx). 
+</details>
+:::
+
+In the supplementary data, the authors forgot to add the location of the kai population, here we just assigned it to NEF. Let us see if that was the correct designation. 
 
 Key:
+
 * SWF: South Western Finland
+
 * NEF: North Eastern Finland
 
 To change the header of a column in R
 ```{.r}
  names(df)[names(df) == 'old.var.name'] <- 'new.var.name'
 ```
-A basic barplot in ggplot. We can talk about facet wrap, 
-```{.r}
-ggplot(input_file, aes(x=Individual, y =Mean.Depth, fill=Population)) +
+
+### Explore the metadata
+
+Here is a basic barplot in ggplot.
+```{r}
+ggplot(input_data, aes(x=ind, y =bio01, fill=Population)) +
 geom_bar(stat = "identity") +
 facet_wrap(~Location, scales = "free_x")
 ```
+
+::: {.callout-tip}
+## Hands-on
+What is plotted here? What else would you like to plot to get to know more about your data?
+
+<details>
+<summary>solution: </summary>
+The key to what the different columns in *Environmental_variation.csv* mean is in the file *README_phenig.txt*. 
+
+Column bio01, plotted here, is the annual mean temperature at the sample site. 
+</details>
+:::
 
 ## Assessing quality of the VCF
 We have a special version of VCFtools that supports haploid data (https://github.com/jydu/vcftools). Everything remains the same as the original version of VCFtools, with added support for haploid datasets that becomes important for some of the summary statistics. Have a look at the VCFtools manual to see the range of possible functions within this software (https://vcftools.sourceforge.net/man_latest.html).
@@ -106,58 +184,80 @@ We have a special version of VCFtools that supports haploid data (https://github
 In VCFtools, it is important to remember to use the --recode option if you would like to output a new VCF that is filtered or contains a subset of positions or individuals. --out only sets the name of the output file. Use concise names so that it is easy for you to see what's in the output.
 
 Let us start by having a look at the sequencing depth of various aspects of the VCF. From the manual, figure out what each function means. Use less to see what's in each of these output files.
-```{bash}
+
+```{.bash}
 vcftools-haploid --vcf --depth 
 ```
-```{bash}
+
+```{.bash}
 vcftools-haploid --vcf --site-depth 
 ```
-```{bash}
+
+```{.bash}
 vcftools-haploid --vcf  --site-mean-depth
 ```
+
 Next, we want to see what the quality per site is
-```{bash}
+```{.bash}
 vcftools-haploid --vcf --site-quality
 ```
+
 I prefer analysing these outputs in R. For that, download the output files to your computer through FileZilla and import them into R. From there, decide on upper and lower boundaries to filter the variants on your scaffold.
 
 Keep only the scaffold your group is working on in your folder
-```{bash}
+
+```{.bash}
 vcftools-haploid --vcf --chr --recode
 ```
+
 For downstream analyses, we need to remove all indels from the VCF
-```{bash}
+
+```{.bash}
 vcftools-haploid --vcf --remove-indels --recode
 ```
+
 For most analyses, we only consider bi-allelic sites
-```{bash}
+
+```{.bash}
 vcftools-haploid --vcf --min-alleles 2 --max-alleles 2 --recode
 ```
+
 Look at allele frequency
-```{bash}
+
+```{.bash}
 vcftools-haploid --vcf --freq 
 ```
+
 Tajima's D in bins
-```{bash}
+
+```{.bash}
 vcftools-haploid --vcf --TajimaD 
 ```
+
 Pi per site
-```{bash}
+
+```{.bash}
 vcftools-haploid --vcf --site-pi
 ```
+
 Pi per window
-```{bash}
+
+```{.bash}
 vcftools-haploid --vcf --window-pi
 ```
+
 Fst. Here, create a file of individuals from 6 populations (2 SWF, 2 NEF, Sweden, Poland) that you will use as pop1 and pop2 to do a pairwise Fst analysis to determine what the fixation index is.
-```{bash}
+
+```{.bash}
 vcftools-haploid --vcf --weir-fst-pop pop1 --weir-fst-pop pop2 -fst-window-size
 ```
 
 PCA that will also be plotted in R. For the PCA, you will plot the eigenvalues to illustrate what each component explains in your data, as well as PC1 and PC2, Pc2 and PC3, and PC3 and PC4.
-```{bash}
+
+```{.bash}
 plink --vcf --pca
 ```
+
 If there is a region that is under selection within your data, have a look at the gff3 file to see the genes that are present within the region.
 
 With these kinds of analyses, you are very well on the way to finding regions that are under selection by combining Tajima's D and Fst. You can show which regions have higher SNP density. 
