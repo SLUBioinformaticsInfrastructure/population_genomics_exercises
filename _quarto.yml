@@ -7,11 +7,11 @@ website:
     left:
       - href: index.qmd
         text: Home
-      - href: 0_introduction_to__linux.qmd
+      - href: content/0_introduction_to_linux.qmd
         text: Linux
-      - href: 1_qc_and_read_mapping.qmd
+      - href: content/1_qc_and_read_mapping.qmd
         text: qc, read mapping
-      - href: 2_vcf_manipulation.qmd
+      - href: content/2_vcf_manipulation.qmd
         text: vcf manipulation
       - about.qmd
 
