@@ -2,11 +2,17 @@ project:
   type: website
 
 website:
-  title: "NGS_funghi"
+  title: "Population genomics"
   navbar:
     left:
       - href: index.qmd
         text: Home
+      - href: 0_introduction_to__linux.qmd
+        text: Linux
+      - href: 1_qc_and_read_mapping.qmd
+        text: qc, read mapping
+      - href: 2_vcf_manipulation.qmd
+        text: vcf manipulation
       - about.qmd
 
 format:
