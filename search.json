@@ -165,7 +165,7 @@
     "href": "index.html",
     "title": "Population genomics",
     "section": "",
-    "text": "These are the exercises for a course on how to do basic population genomic analyses:\nPart O: here you can brush up on your linux command line knowledge, or get started learning about the command line. A basic understanding and proficiency is required for the rest of this exercise.\nPart 1: here you can learn about quality control of your samples, read mapping and variant calling.\nPart 2: here you will learn more about the data, the metadata and basic vcf manipulations."
+    "text": "These are the exercises for a course on how to do basic population genomic analyses:\nPart 0: here you can brush up on your linux command line knowledge, or get started learning about the command line. A basic understanding and proficiency is required for the rest of this exercise.\nPart 1: here you can learn about quality control of your samples, read mapping and variant calling.\nPart 2: here you will learn more about the data, the metadata and basic vcf manipulations."
   },
   {
     "objectID": "about.html",
