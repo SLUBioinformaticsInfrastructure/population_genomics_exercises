@@ -2,161 +2,161 @@
   {
     "objectID": "content/0_introduction_to_linux.html",
     "href": "content/0_introduction_to_linux.html",
-    "title": "NGS_funghi",
+    "title": "Population genomics",
     "section": "",
     "text": "Author: Lizel Potgieter, adapted by Amrei Binzer-Panchal\nLinux is a family of open-source Unix-like operating systems based on the Linux kernel, an operating system kernel first released on September 17, 1991, by Linus Torvalds (https://en.wikipedia.org/wiki/Linux). Most servers run on a Linux-based operating system.\nIf you have no, or not much, experience with working with the command line please take some time to follwo the software carpentry course on the Unix shell.\nIf you have some experience with the command line you can have a look at the commands below (Section 2 and onwards) to refresh you knowledge.\nEither way, to make sure that you are on an adequate level of proficiency jump to the last part of this page and take the Linux Exercise Quiz (Section 10) there.\nAnd last but not least, here are some other resources with many other cool tips and tricks for all of your bioinformatics needs. For the full cheat sheets and other commands, please see:\n\nCheatography\nStephen Turner’s GitHub\nMing Tang’s GitHub"
   },
   {
     "objectID": "content/0_introduction_to_linux.html#sec-basic_commands",
     "href": "content/0_introduction_to_linux.html#sec-basic_commands",
-    "title": "NGS_funghi",
+    "title": "Population genomics",
     "section": "2 Basic Structure of Commands",
     "text": "2 Basic Structure of Commands\ncmd refers to a command. Input of cmd from file\ncmd < file\nOutput of cmd2 as file input to cmd1\ncmd1 <(cmd2)\nStandard output (stdout) of cmd to file\ncmd > file\nAppend stdout to file\ncmd >> file\nstdout of cmd1 to cmd2\ncmd1 | cmd2\nRun cmd1 then cmd2\ncmd1 ; cmd2\nRun cmd2 if cmd1 is successful\ncmd1 && cmd2\nRun cmd2 if cmd1 is not successful\ncmd1 || cmd2"
   },
   {
     "objectID": "content/0_introduction_to_linux.html#short-commands",
     "href": "content/0_introduction_to_linux.html#short-commands",
-    "title": "NGS_funghi",
+    "title": "Population genomics",
     "section": "3 Short commands",
     "text": "3 Short commands\nStop current command\nCTRL-c\nGo to start of line\nCTRL-a\nGo to end of line\nCTRL-e\nCut from start of line\nCTRL-u\nCut to end of line\nCTRL-k\nSearch history\nCTRL-r \nRun previous command, replacing abc with 123\n^abc^123"
   },
   {
     "objectID": "content/0_introduction_to_linux.html#grep-commands",
     "href": "content/0_introduction_to_linux.html#grep-commands",
-    "title": "NGS_funghi",
+    "title": "Population genomics",
     "section": "4 Grep commands",
     "text": "4 Grep commands\nCase insens­itive search\ngrep -i\nRecursive search\ngrep -r\nInverted search\ngrep -v\nShow matched part of file only\ngrep -o"
   },
   {
     "objectID": "content/0_introduction_to_linux.html#file-based-commands",
     "href": "content/0_introduction_to_linux.html#file-based-commands",
-    "title": "NGS_funghi",
+    "title": "Population genomics",
     "section": "5 File-based commands",
     "text": "5 File-based commands\nCreate file1\ntouch file1\nConcat­enate files and output\ncat file1 file2\nView and paginate file1\nless file1\nGet type of file1\nfile file1\nCopy file1 to file2\ncp file1 file2\nMove file1 to file2\nmv file1 file2\nDelete file1\nrm file1\nShow first 10 lines of file1\nhead file1\nShow first 50 lines of file1\nhead -n 50 file1\nShow last 10 lines of file1\ntail file1\nOutput last lines of file1 as it changes\ntail -F file1"
   },
   {
     "objectID": "content/0_introduction_to_linux.html#replacing-patterns-with-other-patterns-with-sed",
     "href": "content/0_introduction_to_linux.html#replacing-patterns-with-other-patterns-with-sed",
-    "title": "NGS_funghi",
+    "title": "Population genomics",
     "section": "6 Replacing patterns with other patterns with sed",
     "text": "6 Replacing patterns with other patterns with sed\nReplacing a pattern and writing to a new file (use this until you are certain you know what you are doing)\nsed \"s/foo/bar/g\" $infile > $outfile\nReplacing a pattern in the same file (there is no going back)\nsed -i \"s/foo/bar/g\" $infile\nReplacing a pattern in a line that contains a string (here just foo)\nsed -i \"/foo/s/bar/foobar/g\" $infile"
   },
   {
     "objectID": "content/0_introduction_to_linux.html#some-useful-commands-for-bioinformatics",
     "href": "content/0_introduction_to_linux.html#some-useful-commands-for-bioinformatics",
-    "title": "NGS_funghi",
+    "title": "Population genomics",
     "section": "7 Some Useful Commands for Bioinformatics",
     "text": "7 Some Useful Commands for Bioinformatics\nCount the entries in a fasta file. You can substitute the header (>) for any pattern to count the number of occurrences in your file\ngrep \">\" $infile | wc -l"
   },
   {
     "objectID": "content/0_introduction_to_linux.html#file-manipulation-with-awk",
     "href": "content/0_introduction_to_linux.html#file-manipulation-with-awk",
-    "title": "NGS_funghi",
+    "title": "Population genomics",
     "section": "8 File manipulation with awk",
     "text": "8 File manipulation with awk\nPrint columns 2, 4, and 5 to new file\nawk '{print $2,$4,$5}' input.txt > outfile\nPrint columns where value in column 3 is larger than in column 5\nawk '$3>$5' file.txt\nPrint sum of column 1\nawk '{sum+=$1} END {print sum}' file.txt\nCompute the mean of column 2\nawk '{x+=$2}END{print x/NR}' file.txt\nRemove duplicates while keeping the order of the file\nawk '!visited[$0]++' file.txt\nSplit multi-fasta into individual fasta files\nawk '/^>/{s=++d\".fa\"} {print > s}' multi.fa\nLength of each sequence in a multi-fasta file\nawk '/^>/ {if (seqlen){print seqlen}; print ;seqlen=0;next; } { seqlen = seqlen +length($0)}END{print seqlen}' file.fa\nSort VCF with header\ncat my.vcf | awk '$0~\"^#\" { print $0; next } { print $0 | \"sort -k1,1V -k2,2n\" }'"
   },
   {
     "objectID": "content/0_introduction_to_linux.html#a-basic-for-loop",
     "href": "content/0_introduction_to_linux.html#a-basic-for-loop",
-    "title": "NGS_funghi",
+    "title": "Population genomics",
     "section": "9 A basic for loop",
     "text": "9 A basic for loop\nOften we wish to run the same code for all files that are in a folder, have the same extension (like .fq), or have a similar string in the filename. Instead of changing the name in the code and rerunning it manually, we use for loops. You can write this directly into the terminal, or save it into a bash file (extension .sh) This line of code uses i as the variable for all files that have a .fq extension in the folder, and runs fastqc for each of them. The -o ${i}_fastqc indicates that the original file name will be kept, and appended with _fastqc.\nfor i in *.fq ; do fastqc ${i} -o ${i}_fastqc ; done"
   },
   {
     "objectID": "content/0_introduction_to_linux.html#sec-linux_quiz",
     "href": "content/0_introduction_to_linux.html#sec-linux_quiz",
-    "title": "NGS_funghi",
+    "title": "Population genomics",
     "section": "10 Linux Exercise Quiz",
     "text": "10 Linux Exercise Quiz\nPlease try to complete each task without looking at the answer first.\n\nMake a folder in the proj folder with your name\n\n\n\nsolution:\n\nmkdir your_name\n\n\nNavigate to your folder\n\n\n\nsolution:\n\n cd yourname\n\n\nCreate an empty file\n\n\n\nsolution:\n\n touch randomfile\n\n\nRename randomfile\n\n\n\nsolution:\n\n mv randomfile randomfile2\n\n\nDelete random file\n\n\n\nsolution:\n\n rm randomfile2\n\n\nCreate a directory\n\n\n\nsolution:\n\n mkdir randomdir\n\n\nDelete the directory\n\n\n\nsolution:\n\n rm -r randomdir\n\n\nCreate a symbolic link (symlink) from the source data to your own folder. Please do not copy it to your own directories! There will be a new folder for each subsection of the workshop. This example is only for the fastq files we will use for read mapping\n\n\n\nsolution:\n\n ln -s /1_fastqc/*fq\n\n\nListing the contents of your directory. The symlinks should have a different colour from than white\n\n\n\nsolution:\n\n ls\n\n\nLoad the bwa module on the server\n\n\n\nsolution:\n\n module load bwa/0.7.4"
   },
   {
     "objectID": "content/1_qc_and_read_mapping.html",
     "href": "content/1_qc_and_read_mapping.html",
-    "title": "NGS_funghi",
+    "title": "Population genomics",
     "section": "",
     "text": "Author: Lizel Potgieter, adapted by Amrei Binzer-Panchal\nIn this part of the exercise, we will have a look at the data, do basic quality control and mapping of the reads.\nIf you don’t know how to use a tool, check out the help function. This is easily done by using the -h or –help flags after the tool name e.g. “fastqc -h”\nFor this course we will assume that you have access to a HPC server. If you don’t have access to a server or a powerful personal computer, you can use for example Galaxy during the workshop."
   },
   {
     "objectID": "content/1_qc_and_read_mapping.html#introduction",
     "href": "content/1_qc_and_read_mapping.html#introduction",
-    "title": "NGS_funghi",
+    "title": "Population genomics",
     "section": "2 Introduction",
     "text": "2 Introduction\nRead mapping and variant calling is the most important aspect of population genomics analyses. Appropriate quality control and the selection of applicable pipelines is therefore crucial to obtain trustworthy data for reliable and reproducible analyses. In this session, we will use simulated data to test the reliability of the methods.\nIn preparation for this course, I have created a forward simulation of a population of 20 individuals from the first chromosome from Lentinula edodes (publication here). This assembly was produced from third generation sequencing. Using simulated data allows us to test the precision and recall of our methods.\nAfter each section, there are some basic questions I’d like you to think about and answer. These will not be graded, and are merely points to ensure that you have understood everything we are covering in each section."
   },
   {
     "objectID": "content/1_qc_and_read_mapping.html#description-of-what-is-in-the-folder-1_read_mapping",
     "href": "content/1_qc_and_read_mapping.html#description-of-what-is-in-the-folder-1_read_mapping",
-    "title": "NGS_funghi",
+    "title": "Population genomics",
     "section": "3 Description of what is in the folder 1_read_mapping",
     "text": "3 Description of what is in the folder 1_read_mapping\n\nThe reference sequence: lentinula_scaffold_1.fa\nForward and reverse reads for 20 simulated individuals SE001 to SE020 in a separate folder (fastq)"
   },
   {
     "objectID": "content/1_qc_and_read_mapping.html#read-quality-assessment",
     "href": "content/1_qc_and_read_mapping.html#read-quality-assessment",
-    "title": "NGS_funghi",
+    "title": "Population genomics",
     "section": "4 Read Quality Assessment",
     "text": "4 Read Quality Assessment\nTools: FastQC, MultiQC\nFastQC and MultiQC\nWe want to perform Quality Control (QC) on our raw sequence data. We will use FastQC to generate quality reports from our fastq files, and we will use MultiQC to aggregate our reports. Our data was simulated to mimic the error profile of an Illumina HiSeq 2500. The quality of short reads has improved drastically over the years, so the reports we’ll get are realistic representations of recently sequenced genomes. For some older sequencing runs, the quality may not be as good, and you may have to employ additional software to control for worse quality and the presence of adapters. To trim poor quality sequences, consider Trimmomatic (http://www.usadellab.org/cms/?page=trimmomatic) or scripts within the BBMap package (https://github.com/BioInfoTools/BBMap). We won’t be touching on trimming and repairing mismatched reads in this tutorial.\nFor a few samples, generate the FastQC report.\nfastqc $infile -o $infile_fastqc \nMultiQC is like FastQC, but for several samples at once.\nmultiqc $infile1 $infile2\nQuestions\n\nWhat kind of reads do we have?\nWhy does the quality of the reads decrease slightly at the end of the read?\nIs this kind of data expected from a real experiment?\nWhat do you expect to see if there is primer contamination?\nWhat is a deviation from the expected GC possibly indicative of?\nHow does GC content affect genome assembly and read mapping?"
   },
   {
     "objectID": "content/1_qc_and_read_mapping.html#read-mapping",
     "href": "content/1_qc_and_read_mapping.html#read-mapping",
-    "title": "NGS_funghi",
+    "title": "Population genomics",
     "section": "5 Read Mapping",
     "text": "5 Read Mapping\nTools: BWA, Samtools, GATK\nTo perform variant calling, the reads must be mapped to a reference genome. To accomplish this, we employ the Burrows-Wheeler Alignment (BWA) tool.\n“BWA is a software package for mapping low-divergent sequences against a large reference genome, such as the human genome. It consists of three algorithms: BWA-backtrack, BWA-SW and BWA-MEM. The first algorithm is designed for Illumina sequence reads up to 100bp, while the rest two for longer sequences ranged from 70bp to 1Mbp. BWA-MEM and BWA-SW share similar features such as long-read support and split alignment, but BWA-MEM, which is the latest, is generally recommended for high-quality queries as it is faster and more accurate. BWA-MEM also has better performance than BWA-backtrack for 70-100bp Illumina reads.\nFor all the algorithms, BWA first needs to construct the FM-index for the reference genome (the index command). Alignment algorithms are invoked with different sub-commands: aln/samse/sampe for BWA-backtrack, bwasw for BWA-SW and mem for the BWA-MEM algorithm.” https://bio-bwa.sourceforge.net/bwa.shtml\nWe will be using the BWA-MEM2 function in Galaxy. You will need to use the lentinula_scaffold_1.fa reference sequence, create an index, and select the paired reads function to map the reads to reference sequence.\nFirst, the reference genome must be indexed.\nsamtools faidx\nNext, the forward and reverse reads are mapped to the reference genome. Here, try to use a for loop to automate the process. Let me know if you get stuck!\nbwa mem $reference_genome $read1 $read2 > $outfile.sam\nHave a look at the contents of one of the .sam files. Can you see the various characteristics of the file I spoke about during my introductory lecture? To save some space, convert the .sam to a .bam file with Samtools\nsamtools view \nRemove all the .sam files in your directory\nrm\nSort the contents of the .bam files\nsamtools sort\nRemove duplicates from the sorted .bam files\nsamtools rmdup\nIndex the sorted .bam files that have had duplicates removed\nsamtools index\nNow that the pre-processing has been done, we will move over to GATK to call variants. Here it is important to set ploidy to the organism you’re working on. We’re working on a haploid genome in this workshop\ngatk HaplotypeCaller \nHere you will have an individual GVCF file for each individual. These need to be combined to a single GVCF\ngatk CombineGVCFs\nThe combined GVCF, must be genotyped\ngatk GenotypeGVCFs\nNow you have a raw VCF that can be filtered in subsequent steps. In this practical, we will practice plotting some of this really tidy data, and compare it to a real world VCF to see the extent of noise in the dataset.\nQuestions\n\nAt which position is the first variant detected?\nWhat does the QUAL field indicate? Why are some quality scores so much lower than others?\nWhat kind of filtering criteria would you consider with this data?\nIf you had a diploid species, how would the VCF differ from the one you have produced today?\nHow would you benchmark your pipeline?\n\nIf you are feeling particularly adventurous and want to make full use of the fact that this was a simulated dataset, please see the first optional exercise. If you have had more than enough of read mapping, don’t worry about this exercise!"
   },
   {
     "objectID": "content/1_qc_and_read_mapping.html#genome-assembly-and-quality-assessment",
     "href": "content/1_qc_and_read_mapping.html#genome-assembly-and-quality-assessment",
-    "title": "NGS_funghi",
+    "title": "Population genomics",
     "section": "6 Genome Assembly and Quality Assessment",
     "text": "6 Genome Assembly and Quality Assessment\nTools: SPAdes, QUAST\nIt’s all well and good if you have a reference genome to work with, but if you don’t you need to assemble your own reference genome. At the moment, this is mostly done with third generation sequencing as the reads are longer, and telomere-to-telomere assemblies are fairly easily attainable. However, in a lot of studies, there is only Illumina data available. In this part of the workshop, you will create a de novo assembly for one of the isolates and assess the quality\nSPAdes\nThe current version of SPAdes works with reads produced by Illumina or IonTorrent and is capable of providing hybrid assemblies using PacBio, Oxford Nanopore and Sanger reads. You can also provide additional contigs that will be used as long reads. SPAdes (v3.15.0) supports paired-end reads, mate-pairs and unpaired reads. SPAdes can take as input several paired-end and mate-pair libraries simultaneously. Note, that SPAdes was initially designed for small genomes. It was tested on bacterial (both single-cell Multiple displacement amplification (MDA) and standard isolates), fungal and other small genomes. SPAdes is not intended for larger genomes (e.g. mammalian size genomes). For such purposes you can use it at your own risk Reference: https://cab.spbu.ru/software/spades/\npython spades.py -1 $infile_read1 $infile_read2 -o $infile_assembly\nTry change the k-mer sizes, and see how that affects your assembly. To get quality statistics of your assembly, use QUAST on your final assembly\nquast\nTo just quickly see how many scaffolds are present in your assembly, use this neat little bash trick\ngrep \">\" $infile | wc -l\nQuestions\n\nHow many contigs have been built?\nWhat is the mean, min and max length of the contigs?\nWhat is the N50 of the contigs? How do you interpret N50 and L50?\nWhat is the effect on the assembly when you vary the k-mer parameter?\nWhat is the advantage of reference guided assembly over de novo assembly?"
   },
   {
     "objectID": "content/2_vcf_manipulation.html",
     "href": "content/2_vcf_manipulation.html",
-    "title": "NGS_funghi",
+    "title": "Population genomics",
     "section": "",
     "text": "Author: Lizel Potgieter, adapted by Amrei Binzer-Panchal"
   },
   {
     "objectID": "content/2_vcf_manipulation.html#introduction",
     "href": "content/2_vcf_manipulation.html#introduction",
-    "title": "NGS_funghi",
+    "title": "Population genomics",
     "section": "2 Introduction",
     "text": "2 Introduction\nA variant call format (VCF) is a type of file that stores all the information regarding variant and non-variant sites of individuals mapped to a reference assembly. This assembly can be a single chromosome, or a collection of scaffolds- there really is no limit!"
   },
   {
     "objectID": "content/2_vcf_manipulation.html#data-we-will-be-using",
     "href": "content/2_vcf_manipulation.html#data-we-will-be-using",
-    "title": "NGS_funghi",
+    "title": "Population genomics",
     "section": "3 Data we will be using",
     "text": "3 Data we will be using\nTo get familiar with the kind of tools and data one typically uses in bioinformatics analyses, we have selected a case from literature.\n\nPublication\nData set\nReference genome\n\nTo get around storage and computational time restrictions, you can do the following anslyses on one scaffold. Redo some of the analyses and statistics that are presented in the supplementary material. Are there any regions under selection in your scaffold?"
   },
   {
     "objectID": "content/2_vcf_manipulation.html#dowload-the-data",
     "href": "content/2_vcf_manipulation.html#dowload-the-data",
-    "title": "NGS_funghi",
+    "title": "Population genomics",
     "section": "4 Dowload the data",
     "text": "4 Dowload the data\nDownload the data from the above links. Make sure you download the data set, as well as the corresponding R scripts.\n\n\n\n\n\n\nHands-on\n\n\n\nLook at the data set to see what files there are, what they contain and how they are structured (hint: start at the README file)."
   },
   {
     "objectID": "content/2_vcf_manipulation.html#tools-for-vcf-analyses",
     "href": "content/2_vcf_manipulation.html#tools-for-vcf-analyses",
-    "title": "NGS_funghi",
+    "title": "Population genomics",
     "section": "5 Tools for VCF analyses",
     "text": "5 Tools for VCF analyses\nThere are a multitude of tools available for the analysis of VCFs. It is almost entirely up to the researcher how they wish to interact with these files. Some bioinformaticians prefer to analyse files in the CLI and only plot the final data in R or python, while others prefer to do everything with R packages. For this part of the workshop, you will work with bits of both aspects."
   },
   {
     "objectID": "content/2_vcf_manipulation.html#r",
     "href": "content/2_vcf_manipulation.html#r",
-    "title": "NGS_funghi",
+    "title": "Population genomics",
     "section": "6 R",
     "text": "6 R\nOne popular R package for VCF analyses is vcfR.\nTo plot data, we will use ggplot2, and some functions of the dplyr package.\n\n\n\n\n\n\nHands-on\n\n\n\nLoad the packages in R (for example in R-studio).\n\n\nsolution:\n\n\nlibrary(\"vcfR\")\n\n\n   *****       ***   vcfR   ***       *****\n   This is vcfR 1.14.0 \n     browseVignettes('vcfR') # Documentation\n     citation('vcfR') # Citation\n   *****       *****      *****       *****\n\nlibrary(\"ggplot2\")\nlibrary(\"dplyr\")\n\n\nAttaching package: 'dplyr'\n\n\nThe following objects are masked from 'package:stats':\n\n    filter, lag\n\n\nThe following objects are masked from 'package:base':\n\n    intersect, setdiff, setequal, union\n\n\n\n\n\n\n6.1 Metadata\nTo ensure that your plots are easy to understand, it is important to have some metadata stored in the data you wish to plot. This can be sampling location, identity to ancestral genetic population, sampling year, and so on.\nThe data we will be using has really neat identifiers as the individual names start with the population. Good sample names facilitate analyses, automation and therefore reduce the chance of human error (as careful as you are, mistakes can happen very easily with large amounts of data and automation ensures that mistakes can easily be caught and corrected!) Have a look in the online data to see if you can see where this comes from.\n\n\n\n\n\n\nHands-on\n\n\n\nRead in the data. Which file contains the information we need?\n\n\nsolution:\n\n\nsetwd(\"/Users/amrei/Desktop/NGS_data_Lizel/doi_10.5061_dryad.7d7wm37wr__v4/\")\ninput_data <- read.csv(\"Environmental_variation.csv\") \nstr(input_data)\n\n'data.frame':   275 obs. of  24 variables:\n $ pop          : chr  \"bil\" \"bil\" \"bil\" \"bil\" ...\n $ ind          : chr  \"Bil1Phenig4\" \"BilPhenig1\" \"BilPhenig10\" \"BilPhenig11\" ...\n $ Latitude     : num  63.1 63.1 63.1 63.1 63.1 ...\n $ longitude    : num  16.6 16.6 16.6 16.6 16.6 ...\n $ bio01        : num  1.81 1.81 1.81 1.81 1.81 ...\n $ bio02        : num  8.32 8.32 8.32 8.32 8.32 ...\n $ bio03        : num  25.9 25.9 25.9 25.9 25.9 ...\n $ bio04        : num  845 845 845 845 845 ...\n $ bio05        : num  17.4 17.4 17.4 17.4 17.4 17.4 17.4 17.4 17.4 17.4 ...\n $ bio06        : num  -14.8 -14.8 -14.8 -14.8 -14.8 -14.8 -14.8 -14.8 -14.8 -14.8 ...\n $ bio07        : num  32.2 32.2 32.2 32.2 32.2 32.2 32.2 32.2 32.2 32.2 ...\n $ bio08        : num  12.6 12.6 12.6 12.6 12.6 ...\n $ bio09        : num  -3.98 -3.98 -3.98 -3.98 -3.98 ...\n $ bio10        : num  12.6 12.6 12.6 12.6 12.6 ...\n $ bio11        : num  -8.35 -8.35 -8.35 -8.35 -8.35 -8.35 -8.35 -8.35 -8.35 -8.35 ...\n $ bio12        : int  668 668 668 668 668 668 668 668 668 668 ...\n $ bio13        : int  94 94 94 94 94 94 94 94 94 94 ...\n $ bio14        : int  31 31 31 31 31 31 31 31 31 31 ...\n $ bio15        : num  32.8 32.8 32.8 32.8 32.8 ...\n $ bio16        : int  240 240 240 240 240 240 240 240 240 240 ...\n $ bio17        : int  109 109 109 109 109 109 109 109 109 109 ...\n $ bio18        : int  240 240 240 240 240 240 240 240 240 240 ...\n $ bio19        : int  123 123 123 123 123 123 123 123 123 123 ...\n $ mean_NHx_2009: num  3.27e-12 3.27e-12 3.27e-12 3.27e-12 3.27e-12 ...\n\n\n\n\n\nUsing  we can use the information in the individual IDs to make two new columns, Population and Location:\n\ninput_data <- input_data %>%\n  mutate(Population = case_when(\n    startsWith(ind, \"Bil\") ~ \"bil\",\n    startsWith(ind, \"BNP\") ~ \"bnp\",\n    startsWith(ind, \"Her\") ~ \"her\",\n    startsWith(ind, \"Iss\") ~ \"iss\",\n    startsWith(ind, \"Kai\") ~ \"kai\",\n    startsWith(ind, \"Koi\") ~ \"koi\",\n    startsWith(ind, \"Kot\") ~ \"kot\",\n    startsWith(ind, \"Luu\") ~ \"luu\",\n    startsWith(ind, \"Met\") ~ \"met\",\n    startsWith(ind, \"Mor\") ~ \"mor\",\n    startsWith(ind, \"Mus\") ~ \"mus\",\n    startsWith(ind, \"Myl\") ~ \"myl\",\n    startsWith(ind, \"Pam\") ~ \"pam\",\n    startsWith(ind, \"Pat\") ~ \"pat\",\n    startsWith(ind, \"Pet\") ~ \"pet\",\n    startsWith(ind, \"Puk\") ~ \"puk\",\n    startsWith(ind, \"Rus\") ~ \"rus\",\n    startsWith(ind, \"Sig\") ~ \"sig\",\n    startsWith(ind, \"Skj\") ~ \"skj\",\n    startsWith(ind, \"eSK\") ~ \"skj\",\n    startsWith(ind, \"Spk\") ~ \"spk\",\n    startsWith(ind, \"Sus\") ~ \"sus\",\n    startsWith(ind, \"Ulv\") ~ \"ulv\",\n    startsWith(ind, \"Van\") ~ \"van\",\n    startsWith(ind, \"Ves\") ~ \"ves\"\n  ))\n\n input_data <- input_data %>%\n  mutate(Location = case_when(\n    startsWith(ind, \"Bil\") ~ \"Sweden\",\n    startsWith(ind, \"BNP\") ~ \"Poland\",\n    startsWith(ind, \"Her\") ~ \"SWF\",\n    startsWith(ind, \"Iss\") ~ \"NEF\",\n    startsWith(ind, \"Kai\") ~ \"NEF\",\n    startsWith(ind, \"Koi\") ~ \"NEF\",\n    startsWith(ind, \"Kot\") ~ \"SWF\",\n    startsWith(ind, \"Luu\") ~ \"SWF\",\n    startsWith(ind, \"Met\") ~ \"SWF\",\n    startsWith(ind, \"Mor\") ~ \"Norway\",\n    startsWith(ind, \"Mus\") ~ \"SWF\",\n    startsWith(ind, \"Myl\") ~ \"SWF\",\n    startsWith(ind, \"Pam\") ~ \"NEF\",\n    startsWith(ind, \"Pat\") ~ \"NEF\",\n    startsWith(ind, \"Pet\") ~ \"SWF\",\n    startsWith(ind, \"Puk\") ~ \"SWF\",\n    startsWith(ind, \"Rus\") ~ \"Russia\",\n    startsWith(ind, \"Sig\") ~ \"Norway\",\n    startsWith(ind, \"Skj\") ~ \"Norway\",\n    startsWith(ind, \"eSK\") ~ \"Norway\",\n    startsWith(ind, \"Spk\") ~ \"Norway\",\n    startsWith(ind, \"Sus\") ~ \"SWF\",\n    startsWith(ind, \"Ulv\") ~ \"NEF\",\n    startsWith(ind, \"Van\") ~ \"NEF\",\n    startsWith(ind, \"Ves\") ~ \"SWF\"\n))\n\n\n\n\n\n\n\nHands-on\n\n\n\nWhere did we find the location information for the samples?\n\n\nsolution:\n\nIn the supplementary information available for download together with the publication.\nScroll down to supporting information. Name of the file: mec16369-sup-0001-supinfo.docx.\n\n\n\nIn the supplementary data, the authors forgot to add the location of the kai population, here we just assigned it to NEF. Let us see if that was the correct designation.\nKey:\n\nSWF: South Western Finland\nNEF: North Eastern Finland\n\nTo change the header of a column in R\n names(df)[names(df) == 'old.var.name'] <- 'new.var.name'\n\n\n6.2 Explore the metadata\nHere is a basic barplot in ggplot.\n\nggplot(input_data, aes(x=ind, y =bio01, fill=Population)) +\ngeom_bar(stat = \"identity\") +\nfacet_wrap(~Location, scales = \"free_x\")\n\n\n\n\n\n\n\n\n\n\nHands-on\n\n\n\nWhat is plotted here? What else would you like to plot to get to know more about your data?\n\n\nsolution:\n\nThe key to what the different columns in Environmental_variation.csv mean is in the file README_phenig.txt.\nColumn bio01, plotted here, is the annual mean temperature at the sample site."
   },
   {
     "objectID": "content/2_vcf_manipulation.html#assessing-quality-of-the-vcf",
     "href": "content/2_vcf_manipulation.html#assessing-quality-of-the-vcf",
-    "title": "NGS_funghi",
+    "title": "Population genomics",
     "section": "7 Assessing quality of the VCF",
     "text": "7 Assessing quality of the VCF\nWe have a special version of VCFtools that supports haploid data (https://github.com/jydu/vcftools). Everything remains the same as the original version of VCFtools, with added support for haploid datasets that becomes important for some of the summary statistics. Have a look at the VCFtools manual to see the range of possible functions within this software (https://vcftools.sourceforge.net/man_latest.html).\nIn VCFtools, it is important to remember to use the –recode option if you would like to output a new VCF that is filtered or contains a subset of positions or individuals. –out only sets the name of the output file. Use concise names so that it is easy for you to see what’s in the output.\nLet us start by having a look at the sequencing depth of various aspects of the VCF. From the manual, figure out what each function means. Use less to see what’s in each of these output files.\nvcftools-haploid --vcf --depth \nvcftools-haploid --vcf --site-depth \nvcftools-haploid --vcf  --site-mean-depth\nNext, we want to see what the quality per site is\nvcftools-haploid --vcf --site-quality\nI prefer analysing these outputs in R. For that, download the output files to your computer through FileZilla and import them into R. From there, decide on upper and lower boundaries to filter the variants on your scaffold.\nKeep only the scaffold your group is working on in your folder\nvcftools-haploid --vcf --chr --recode\nFor downstream analyses, we need to remove all indels from the VCF\nvcftools-haploid --vcf --remove-indels --recode\nFor most analyses, we only consider bi-allelic sites\nvcftools-haploid --vcf --min-alleles 2 --max-alleles 2 --recode\nLook at allele frequency\nvcftools-haploid --vcf --freq \nTajima’s D in bins\nvcftools-haploid --vcf --TajimaD \nPi per site\nvcftools-haploid --vcf --site-pi\nPi per window\nvcftools-haploid --vcf --window-pi\nFst. Here, create a file of individuals from 6 populations (2 SWF, 2 NEF, Sweden, Poland) that you will use as pop1 and pop2 to do a pairwise Fst analysis to determine what the fixation index is.\nvcftools-haploid --vcf --weir-fst-pop pop1 --weir-fst-pop pop2 -fst-window-size\nPCA that will also be plotted in R. For the PCA, you will plot the eigenvalues to illustrate what each component explains in your data, as well as PC1 and PC2, Pc2 and PC3, and PC3 and PC4.\nplink --vcf --pca\nIf there is a region that is under selection within your data, have a look at the gff3 file to see the genes that are present within the region.\nWith these kinds of analyses, you are very well on the way to finding regions that are under selection by combining Tajima’s D and Fst. You can show which regions have higher SNP density."
   },
