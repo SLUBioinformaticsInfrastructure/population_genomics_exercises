@@ -15,7 +15,12 @@ In preparation for this course, I have created a forward simulation of a populat
 
 After each section, there are some basic questions I'd like you to think about and answer. These will not be graded, and are merely points to ensure that you have understood everything we are covering in each section.
 
-## Description of what is in the folder 1_read_mapping
+## The data
+
+You can download the data [here](https://figshare.com/articles/dataset/Read_Mapping_Forward_Simulation_for_Variant_Calling/22309726). 
+
+### Description of the data
+
 1. The reference sequence: lentinula_scaffold_1.fa
 2. Forward and reverse reads for 20 simulated individuals SE001 to SE020 in a separate folder (fastq)
 
@@ -27,17 +32,34 @@ Tools: FastQC, MultiQC
 We want to perform Quality Control (QC) on our raw sequence data. We will use FastQC to generate quality reports from our fastq files, and we will use MultiQC to aggregate our reports. Our data was simulated to mimic the error profile of an Illumina HiSeq 2500. The quality of short reads has improved drastically over the years, so the reports we'll get are realistic representations of recently sequenced genomes. For some older sequencing runs, the quality may not be as good, and you may have to employ additional software to control for worse quality and the presence of adapters.
 To trim poor quality sequences, consider Trimmomatic (http://www.usadellab.org/cms/?page=trimmomatic) or scripts within the BBMap package (https://github.com/BioInfoTools/BBMap). We won't be touching on trimming and repairing mismatched reads in this tutorial.
 
+::: {.callout-tip}
+## Hands-on
 For a few samples, generate the FastQC report. 
+
+<details>
+<summary>solution: </summary>
 ```{.bash}
 fastqc $infile -o $infile_fastqc 
 ```
+</details>
+:::
 
-MultiQC is like FastQC, but for several samples at once.
+
+::: {.callout-tip}
+## Hands-on
+MultiQC is like FastQC, but for several samples at once. It can also detect and summarize output reports from a variety of tools to give you an overview of the performance of tools you used on your data. 
+
+<details>
+<summary>solution: </summary>
 ```{.bash}
 multiqc $infile1 $infile2
 ```
-***Questions***
+</details>
+:::
 
+
+::: {.callout-tip}
+## Questions
 1. What kind of reads do we have?
 
 2. Why does the quality of the reads decrease slightly at the end of the read?
@@ -49,6 +71,9 @@ multiqc $infile1 $infile2
 5. What is a deviation from the expected GC possibly indicative of?
 
 6. How does GC content affect genome assembly and read mapping?
+:::
+
+
 
 ## Read Mapping
 Tools: BWA, Samtools, GATK
@@ -155,8 +180,10 @@ To just quickly see how many scaffolds are present in your assembly, use this ne
 grep ">" $infile | wc -l
 ```
 
-*Questions*
 
+
+::: {.callout-tip}
+## Questions
 1. How many contigs have been built? 
 
 2. What is the mean, min and max length of the contigs?
@@ -166,3 +193,4 @@ grep ">" $infile | wc -l
 4. What is the effect on the assembly when you vary the k-mer parameter?
 
 5. What is the advantage of reference guided assembly over *de novo* assembly?
+:::
