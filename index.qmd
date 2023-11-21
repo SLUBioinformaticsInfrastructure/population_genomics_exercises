@@ -8,5 +8,5 @@ These are the exercises for a course on how to do basic population genomic analy
 
 [Part 1](content/1_qc_and_read_mapping.qmd): here you can learn about quality control of your samples, read mapping and variant calling. 
 
-[Part 2](content/2_vcf_manipulation.qmd):
+[Part 2](content/2_vcf_manipulation.qmd): here you will learn more about the data, the metadata and basic vcf manipulations.
 
