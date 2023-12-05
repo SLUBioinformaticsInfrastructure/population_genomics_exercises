@@ -17,12 +17,15 @@ website:
 
 format:
   html:
-    theme: united
+    theme:
+      light: flatly
+      dark: darkly
     self-contained: true
     page-layout: full
     css: styles.css
     toc: true
     number-sections: true
+
 
 
 
