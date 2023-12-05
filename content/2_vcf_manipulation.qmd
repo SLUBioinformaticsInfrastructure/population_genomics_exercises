@@ -63,8 +63,7 @@ Read in the data. Which file contains the information we need?
 <details>
 <summary>solution: </summary>
 ```{R}
-setwd("/Users/amrei/Desktop/NGS_data_Lizel/doi_10.5061_dryad.7d7wm37wr__v4/")
-input_data <- read.csv("Environmental_variation.csv") 
+input_data <- read.csv("/Users/amrei/Desktop/NGS_data_Lizel/doi_10.5061_dryad.7d7wm37wr__v4/Environmental_variation.csv") 
 str(input_data)
 ```
 </details>
