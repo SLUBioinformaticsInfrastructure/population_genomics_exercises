@@ -17,24 +17,39 @@ After each section, there are some basic questions I'd like you to think about a
 
 ## The data
 
+### Download 
+
 You can download the data [here](https://figshare.com/articles/dataset/Read_Mapping_Forward_Simulation_for_Variant_Calling/22309726). 
 
-### Description of the data
+### Description
+
+Our data was simulated to mimic the error profile of an Illumina HiSeq 2500.
 
 1. The reference sequence: lentinula_scaffold_1.fa
-2. Forward and reverse reads for 20 simulated individuals SE001 to SE020 in a separate folder (fastq)
+2. Forward and reverse reads for 20 simulated individuals SE001 to SE020 in a separate folder: full_pop_fastq
+3. General feature file that contains the annotation: lentinula_scaffold_1.gff3
+4. Newich files for phylogenetic tree: Lentinula_chr1.RealTree.nwk
 
 ## Read Quality Assessment
 Tools: FastQC, MultiQC
 
 **FastQC and MultiQC**
 
-We want to perform Quality Control (QC) on our raw sequence data. We will use FastQC to generate quality reports from our fastq files, and we will use MultiQC to aggregate our reports. Our data was simulated to mimic the error profile of an Illumina HiSeq 2500. The quality of short reads has improved drastically over the years, so the reports we'll get are realistic representations of recently sequenced genomes. For some older sequencing runs, the quality may not be as good, and you may have to employ additional software to control for worse quality and the presence of adapters.
-To trim poor quality sequences, consider Trimmomatic (http://www.usadellab.org/cms/?page=trimmomatic) or scripts within the BBMap package (https://github.com/BioInfoTools/BBMap). We won't be touching on trimming and repairing mismatched reads in this tutorial.
+Before we continue the analysis of our data we need to perform Quality Control (QC) on our raw sequence data. We will use FastQC to generate quality reports from our fastq files, and we will use MultiQC to aggregate our reports. 
+
+The quality of short reads has improved drastically over the years, so the reports we'll get from our simulated data are realistic representations of recently sequenced genomes. For some older sequencing runs, the quality may not be as good, and you may have to employ additional software to control for worse quality and the presence of adapters. 
+
+There are several different tools to pre-process raw data. [FastP](https://github.com/OpenGene/fastp) is one such fastq pre-processing tool which has  functions for quality control, trimming of adapters, filtering by quality, and read pruning.
+
+Other tools for trimming poor quality sequences, are [Trimmomatic](http://www.usadellab.org/cms/?page=trimmomatic) or scripts within the [BBMap package](https://github.com/BioInfoTools/BBMap). We won't be touching on trimming and repairing mismatched reads in this tutorial. 
+
+### FastQC
+
+[FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) is a quality control tool for high throughput sequencing data. 
 
 ::: {.callout-tip}
 ## Hands-on
-For a few samples, generate the FastQC report. 
+For a few samples, generate the FastQC report. Read the help page to identify which options you should use. 
 
 <details>
 <summary>solution: </summary>
@@ -44,10 +59,13 @@ fastqc $infile -o $infile_fastqc
 </details>
 :::
 
+### MultiQC
+
+MultiQC is like FastQC, but for several samples at once. It can also detect and summarize output reports from a variety of tools to give you an overview of the performance of tools you used on your data. 
 
 ::: {.callout-tip}
 ## Hands-on
-MultiQC is like FastQC, but for several samples at once. It can also detect and summarize output reports from a variety of tools to give you an overview of the performance of tools you used on your data. 
+
 
 <details>
 <summary>solution: </summary>

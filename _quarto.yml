@@ -13,7 +13,6 @@ website:
         text: qc, read mapping
       - href: content/2_vcf_manipulation.qmd
         text: vcf manipulation
-      - about.qmd
 
 format:
   html:
