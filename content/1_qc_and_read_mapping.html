@@ -4023,10 +4023,6 @@ vertical-align: -.125em;
     <a class="nav-link" href="../content/2_vcf_manipulation.html">
  <span class="menu-text">vcf manipulation</span></a>
   </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../about.html">
- <span class="menu-text">About</span></a>
-  </li>  
 </ul>
               <div class="quarto-toggle-container">
                   <a href class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
@@ -4049,9 +4045,14 @@ vertical-align: -.125em;
   <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction"><span class="toc-section-number">2</span>  Introduction</a></li>
   <li><a href="#the-data" id="toc-the-data" class="nav-link" data-scroll-target="#the-data"><span class="toc-section-number">3</span>  The data</a>
   <ul class="collapse">
-  <li><a href="#description-of-the-data" id="toc-description-of-the-data" class="nav-link" data-scroll-target="#description-of-the-data"><span class="toc-section-number">3.1</span>  Description of the data</a></li>
+  <li><a href="#download" id="toc-download" class="nav-link" data-scroll-target="#download"><span class="toc-section-number">3.1</span>  Download</a></li>
+  <li><a href="#description" id="toc-description" class="nav-link" data-scroll-target="#description"><span class="toc-section-number">3.2</span>  Description</a></li>
   </ul></li>
-  <li><a href="#read-quality-assessment" id="toc-read-quality-assessment" class="nav-link" data-scroll-target="#read-quality-assessment"><span class="toc-section-number">4</span>  Read Quality Assessment</a></li>
+  <li><a href="#read-quality-assessment" id="toc-read-quality-assessment" class="nav-link" data-scroll-target="#read-quality-assessment"><span class="toc-section-number">4</span>  Read Quality Assessment</a>
+  <ul class="collapse">
+  <li><a href="#fastqc" id="toc-fastqc" class="nav-link" data-scroll-target="#fastqc"><span class="toc-section-number">4.1</span>  FastQC</a></li>
+  <li><a href="#multiqc" id="toc-multiqc" class="nav-link" data-scroll-target="#multiqc"><span class="toc-section-number">4.2</span>  MultiQC</a></li>
+  </ul></li>
   <li><a href="#read-mapping" id="toc-read-mapping" class="nav-link" data-scroll-target="#read-mapping"><span class="toc-section-number">5</span>  Read Mapping</a></li>
   <li><a href="#genome-assembly-and-quality-assessment" id="toc-genome-assembly-and-quality-assessment" class="nav-link" data-scroll-target="#genome-assembly-and-quality-assessment"><span class="toc-section-number">6</span>  Genome Assembly and Quality Assessment</a></li>
   </ul>
@@ -4077,12 +4078,18 @@ vertical-align: -.125em;
 </section>
 <section id="the-data" class="level2" data-number="3">
 <h2 data-number="3" class="anchored" data-anchor-id="the-data"><span class="header-section-number">3</span> The data</h2>
+<section id="download" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="download"><span class="header-section-number">3.1</span> Download</h3>
 <p>You can download the data <a href="https://figshare.com/articles/dataset/Read_Mapping_Forward_Simulation_for_Variant_Calling/22309726">here</a>.</p>
-<section id="description-of-the-data" class="level3" data-number="3.1">
-<h3 data-number="3.1" class="anchored" data-anchor-id="description-of-the-data"><span class="header-section-number">3.1</span> Description of the data</h3>
+</section>
+<section id="description" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="description"><span class="header-section-number">3.2</span> Description</h3>
+<p>Our data was simulated to mimic the error profile of an Illumina HiSeq 2500.</p>
 <ol type="1">
 <li>The reference sequence: lentinula_scaffold_1.fa</li>
-<li>Forward and reverse reads for 20 simulated individuals SE001 to SE020 in a separate folder (fastq)</li>
+<li>Forward and reverse reads for 20 simulated individuals SE001 to SE020 in a separate folder: full_pop_fastq</li>
+<li>General feature file that contains the annotation: lentinula_scaffold_1.gff3</li>
+<li>Newich files for phylogenetic tree: Lentinula_chr1.RealTree.nwk</li>
 </ol>
 </section>
 </section>
@@ -4090,7 +4097,13 @@ vertical-align: -.125em;
 <h2 data-number="4" class="anchored" data-anchor-id="read-quality-assessment"><span class="header-section-number">4</span> Read Quality Assessment</h2>
 <p>Tools: FastQC, MultiQC</p>
 <p><strong>FastQC and MultiQC</strong></p>
-<p>We want to perform Quality Control (QC) on our raw sequence data. We will use FastQC to generate quality reports from our fastq files, and we will use MultiQC to aggregate our reports. Our data was simulated to mimic the error profile of an Illumina HiSeq 2500. The quality of short reads has improved drastically over the years, so the reports we’ll get are realistic representations of recently sequenced genomes. For some older sequencing runs, the quality may not be as good, and you may have to employ additional software to control for worse quality and the presence of adapters. To trim poor quality sequences, consider Trimmomatic (http://www.usadellab.org/cms/?page=trimmomatic) or scripts within the BBMap package (https://github.com/BioInfoTools/BBMap). We won’t be touching on trimming and repairing mismatched reads in this tutorial.</p>
+<p>Before we continue the analysis of our data we need to perform Quality Control (QC) on our raw sequence data. We will use FastQC to generate quality reports from our fastq files, and we will use MultiQC to aggregate our reports.</p>
+<p>The quality of short reads has improved drastically over the years, so the reports we’ll get from our simulated data are realistic representations of recently sequenced genomes. For some older sequencing runs, the quality may not be as good, and you may have to employ additional software to control for worse quality and the presence of adapters.</p>
+<p>There are several different tools to pre-process raw data. <a href="https://github.com/OpenGene/fastp">FastP</a> is one such fastq pre-processing tool which has functions for quality control, trimming of adapters, filtering by quality, and read pruning.</p>
+<p>Other tools for trimming poor quality sequences, are <a href="http://www.usadellab.org/cms/?page=trimmomatic">Trimmomatic</a> or scripts within the <a href="https://github.com/BioInfoTools/BBMap">BBMap package</a>. We won’t be touching on trimming and repairing mismatched reads in this tutorial.</p>
+<section id="fastqc" class="level3" data-number="4.1">
+<h3 data-number="4.1" class="anchored" data-anchor-id="fastqc"><span class="header-section-number">4.1</span> FastQC</h3>
+<p><a href="https://www.bioinformatics.babraham.ac.uk/projects/fastqc/">FastQC</a> is a quality control tool for high throughput sequencing data.</p>
 <div class="callout-tip callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -4101,7 +4114,7 @@ Hands-on
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>For a few samples, generate the FastQC report.</p>
+<p>For a few samples, generate the FastQC report. Read the help page to identify which options you should use.</p>
 <details>
 <summary>
 solution:
@@ -4110,6 +4123,10 @@ solution:
 </details>
 </div>
 </div>
+</section>
+<section id="multiqc" class="level3" data-number="4.2">
+<h3 data-number="4.2" class="anchored" data-anchor-id="multiqc"><span class="header-section-number">4.2</span> MultiQC</h3>
+<p>MultiQC is like FastQC, but for several samples at once. It can also detect and summarize output reports from a variety of tools to give you an overview of the performance of tools you used on your data.</p>
 <div class="callout-tip callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -4120,7 +4137,6 @@ Hands-on
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>MultiQC is like FastQC, but for several samples at once. It can also detect and summarize output reports from a variety of tools to give you an overview of the performance of tools you used on your data.</p>
 <details>
 <summary>
 solution:
@@ -4149,6 +4165,7 @@ Questions
 </ol>
 </div>
 </div>
+</section>
 </section>
 <section id="read-mapping" class="level2" data-number="5">
 <h2 data-number="5" class="anchored" data-anchor-id="read-mapping"><span class="header-section-number">5</span> Read Mapping</h2>
